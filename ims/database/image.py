@@ -1,13 +1,12 @@
 from sqlalchemy import Boolean, ForeignKey
 from sqlalchemy import UniqueConstraint
 
-from ims.common.log import *
 from ims.database.project import *
 from ims.exception import *
 
-
-
 logger = create_logger(__name__)
+
+
 # This class is responsible for doing CRUD operations on the Image Table in DB
 # This class was written as per the Repository Model which allows us to change the DB in the future without changing
 # business code
@@ -50,6 +49,42 @@ class ImageRepository:
             self.connection.session.rollback()
             raise db_exceptions.ORMException(e.message)
 
+    @log
+    def copy_image(self, name, src_project_name, new_name, dest_pid):
+        try:
+            image = self.connection.session.query(Image). \
+                filter(Image.project.has(name=src_project_name)).filter_by(
+                name=name).one_or_none()
+            new_image = Image()
+            if new_name != '':
+                new_image.name = new_name
+            else:
+                new_image.name = name
+            new_image.project_id = dest_pid
+            new_image.is_public = image.is_public
+            new_image.is_provision_clone = image.is_provision_clone
+            new_image.is_snapshot = image.is_snapshot
+            self.connection.session.add(new_image)
+            self.connection.session.commit()
+        except SQLAlchemyError as e:
+            self.connection.session.rollback()
+            raise db_exceptions.ORMException(e.message)
+
+    @log
+    def move_image(self, src_project_name, name, dest_project_id, new_name):
+        try:
+            image = self.connection.session.query(Image). \
+                filter(Image.project.has(name=src_project_name)).filter_by(
+                name=name).one_or_none()
+
+            image.project_id = dest_project_id
+            if new_name != '':
+                image.name = new_name
+            self.connection.session.commit()
+        except SQLAlchemyError as e:
+            self.connection.session.rollback()
+            raise db_exceptions.ORMException(e.message)
+
     # fetch image ids with name in project with name
     # returns a array of image ids of the images which have the given name
     @log
@@ -64,15 +99,14 @@ class ImageRepository:
             raise db_exceptions.ORMException(e.message)
 
     # Fetch the list of images which are public
+    # Was a dictionary changed it for test cases, dont see a reason as to why we need a dict
     # We are returning a dictionary of format {image_name : <img_name> , project_name : <proj_name>}
     @log
     def fetch_names_with_public(self):
         try:
             img_list = self.connection.session.query(Image).filter_by(
                 is_public=True)
-            return [{'image_name': image.name,
-                     'project_name': image.project.name}
-                    for image in img_list]
+            return [image.name for image in img_list]
         except SQLAlchemyError as e:
             raise db_exceptions.ORMException(e.message)
 
@@ -104,6 +138,26 @@ class ImageRepository:
                 Image.project.has(name=project_name)).filter_by(
                 is_snapshot=True)
             return [image.name for image in images]
+        except SQLAlchemyError as e:
+            raise db_exceptions.ORMException(e.message)
+
+    @log
+    def fetch_clones_from_project(self, project_name):
+        try:
+            images = self.connection.session.query(Image).filter(
+                Image.project.has(name=project_name)).filter_by(
+                is_provision_clone=True)
+            return [image.name for image in images]
+        except SQLAlchemyError as e:
+            raise db_exceptions.ORMException(e.message)
+
+    @log
+    def fetch_all_images(self):
+        try:
+            images = self.connection.session.query(Image)
+            return [[image.id, image.name, image.project.name, image.is_public,
+                     image.is_snapshot, image.is_provision_clone] for image in
+                    images]
         except SQLAlchemyError as e:
             raise db_exceptions.ORMException(e.message)
 
