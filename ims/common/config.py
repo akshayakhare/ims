@@ -1,4 +1,5 @@
 import ConfigParser
+
 import os
 
 import ims.common.constants as constants
@@ -13,7 +14,7 @@ def load():
         if __config is None:
             try:
                 path = os.environ[
-                        constants.CONFIG_LOCATION_ENV_VARIABLE]
+                    constants.CONFIG_LOCATION_ENV_VARIABLE]
             except KeyError:
                 path = constants.CONFIG_DEFAULT_LOCATION
             __config = __BMIConfig(path)
@@ -35,8 +36,8 @@ class __BMIConfig:
         self.fs = {}
         self.uid = None
         self.db_url = None
-        self.iscsi_update = None
         self.iscsi_update_password = None
+        self.iscsi_ip = None
         self.haas_url = None
         self.nameserver_ip = None
         self.nameserver_port = None
@@ -62,12 +63,12 @@ class __BMIConfig:
             self.db_url = config.get(constants.DB_CONFIG_SECTION_NAME,
                                      constants.DB_URL_KEY)
 
-            self.iscsi_update = config.get(constants.ISCSI_CONFIG_SECTION_NAME,
-                                           constants.ISCSI_URL_KEY)
-
             self.iscsi_update_password = config.get(
                 constants.ISCSI_CONFIG_SECTION_NAME,
                 constants.ISCSI_PASSWORD_KEY)
+
+            self.iscsi_ip = config.get(constants.ISCSI_CONFIG_SECTION_NAME,
+                                       constants.ISCSI_IP_KEY)
 
             self.haas_url = config.get(constants.HAAS_CONFIG_SECTION_NAME,
                                        constants.HAAS_URL_KEY)

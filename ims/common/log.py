@@ -1,8 +1,9 @@
 import inspect
 import logging
 import logging.handlers
-import os
 import traceback
+
+import os
 
 import ims.common.config as config
 
@@ -30,7 +31,7 @@ def log(func):
         ret = func(*args, **kwargs)
         if func.__name__ == "__init__":
             logger.info(base_msg + "Successfully Initialised %s instance",
-                        type(list(args)[0]).__name__, extra={'special': True})
+                        list(args)[0].__class__.__name__, extra={'special': True})
         else:
             logger.info(base_msg + "Successfully Executed %s",
                         func.__name__, extra={'special': True})
@@ -90,15 +91,9 @@ def create_logger(name):
         os.makedirs(_base_url)
 
     formatter = BMIFormatter()
-    # specific_file_handler = logging.FileHandler(_base_url + name + ".log",
-    #                                             mode='a')
     all_file_handler = logging.handlers.RotatingFileHandler(
         _base_url + "ims.log", mode='a', maxBytes=10000000, backupCount=10)
-
-    # specific_file_handler.setFormatter(formatter)
     all_file_handler.setFormatter(formatter)
-
-    # logger.addHandler(specific_file_handler)
     logger.addHandler(all_file_handler)
 
     if _verbose:
