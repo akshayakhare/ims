@@ -1,5 +1,5 @@
 # The FROM will be replaced when building in OpenShift
-FROM jenkins_BMI14
+FROM jenkins_bmi14
 
 MAINTAINER Akshaya Khare <akshayakhare@gmail.com>
 
