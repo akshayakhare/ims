@@ -1,5 +1,5 @@
 # The FROM will be replaced when building in OpenShift
-FROM 172.30.118.56:5000/jenkinstin2/jenkins 
+FROM localhost:5000/jenkins_bmi13 
 
 MAINTAINER Akshaya Khare <akshayakhare@gmail.com>
 
