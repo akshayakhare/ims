@@ -35,6 +35,7 @@ if [[ $# -gt 1 ]]; then
   # if -url is not provided try env vars
   if [[ "$@" != *"-url "* ]]; then
     if [ ! -z "$JENKINS_URL" ]; then
+      echo "Is jenkins_url being asigned here?-comment by akshaya"
       PARAMS="$PARAMS -url $JENKINS_URL"
     elif [ ! -z "$JENKINS_SERVICE_HOST" ] && [ ! -z "$JENKINS_SERVICE_PORT" ]; then
       PARAMS="$PARAMS -url http://$JENKINS_SERVICE_HOST:$JENKINS_SERVICE_PORT"
