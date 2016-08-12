@@ -29,7 +29,6 @@ def get():
 
 
 class __BMIConfig:
-    # the config file is hardcoded for now
     # other instance variables are initialized as to not get AttributeErrors
     def __init__(self, filename):
         self.configfile = filename
@@ -57,8 +56,11 @@ class __BMIConfig:
             if not config.read(self.configfile):
                 raise IOError('cannot load ' + self.configfile)
 
-            self.uid = config.get(constants.IDENTITY_CONFIG_SECTION_NAME,
+            self.uid = config.get(constants.BMI_CONFIG_SECTION_NAME,
                                   constants.UID_KEY)
+
+            self.is_service = config.get(constants.BMI_CONFIG_SECTION_NAME,
+                                         constants.SERVICE_KEY) == 'True'
 
             self.db_url = config.get(constants.DB_CONFIG_SECTION_NAME,
                                      constants.DB_URL_KEY)

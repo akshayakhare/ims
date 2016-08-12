@@ -3,7 +3,7 @@ PICASSO_CONFIG_FLAG = 'picasso'
 EINSTEIN_CONFIG_FLAG = 'einstein'
 
 # Config Default Locations
-CONFIG_DEFAULT_LOCATION = 'bmiconfig.cfg'
+CONFIG_DEFAULT_LOCATION = '/etc/bmi/bmiconfig.cfg'
 
 # Environment Variable Names
 CONFIG_LOCATION_ENV_VARIABLE = 'BMI_CONFIG'
@@ -12,7 +12,7 @@ HAAS_USERNAME_VARIABLE = 'HAAS_USERNAME'
 HAAS_PASSWORD_VARIABLE = 'HAAS_PASSWORD'
 
 # Config section names
-IDENTITY_CONFIG_SECTION_NAME = 'identity'
+BMI_CONFIG_SECTION_NAME = 'bmi'
 DB_CONFIG_SECTION_NAME = 'db'
 FILESYSTEM_CONFIG_SECTION_NAME = 'filesystem'
 HAAS_CONFIG_SECTION_NAME = 'haas'
@@ -64,8 +64,9 @@ LOGS_VERBOSE_KEY = 'verbose'
 PXELINUX_URL_KEY = 'pxelinux_url'
 IPXE_URL_KEY = 'ipxe_url'
 
-# Identity
+# BMI
 UID_KEY = 'uid'
+SERVICE_KEY = 'service'
 
 # Response Related Keys
 STATUS_CODE_KEY = 'status_code'
@@ -110,7 +111,9 @@ IET_LUN_STARTING = "Lun"
 
 DNSMASQ_LEASES_LOC = '/var/lib/misc/dnsmasq.leases'
 
-HAAS_CALL_TIMEOUT = 5
+HAAS_CALL_TIMEOUT = 10
 DEFAULT_SNAPSHOT_NAME = "snapshot"
 
 BMI_ADMIN_PROJECT = "bmi_infra"
+
+HAAS_BMI_CHANNEL = "vlan/native"
